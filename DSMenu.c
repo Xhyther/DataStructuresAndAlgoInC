@@ -1625,9 +1625,19 @@ int main() {
                                         case 1:
                                             printf("\e[1;1H\e[2J"); // Clear screen
                                             printf("\n\n\n\n\n");
+                                            printCentered("Current Stack:\n");
+                                            displayStack(top);
+                                            printf("\e[1;1H\e[2J"); // Clear screen
+                                            printf("\n\n\n\n\n");
                                             printCentered(" Enter value to push onto the stack: ");
                                             scanf("%d", &value);
                                             push(&top, value, maxSize);
+                                            do {
+                                                printf("\n");
+                                                printCentered("Type E to Exit: ");
+                                                scanf(" %c", &Exit);
+                                            } while (Exit != 'E'); 
+
                                             break;
                                         case 2:
                                             printf("\e[1;1H\e[2J"); // Clear screen
@@ -1641,9 +1651,10 @@ int main() {
                                                 printf("%d\n", poppedValue);
                                             }
                                             do {
-                                                printf("\t\t\t     Type E to Exit: ");
+                                                printf("\n");
+                                                printCentered("Type E to Exit: ");
                                                 scanf(" %c", &Exit);
-                                            } while (Exit != 'E');
+                                            } while (Exit != 'E'); 
                                             break;
                                         case 3:
                                             printf("\e[1;1H\e[2J"); // Clear screen
@@ -1656,9 +1667,10 @@ int main() {
                                                 printf("%d\n", peek(top));
                                             }
                                             do {
-                                                printf("\t\t\t     Type E to Exit: ");
+                                                printf("\n");
+                                                printCentered("Type E to Exit: ");
                                                 scanf(" %c", &Exit);
-                                            } while (Exit != 'E');
+                                            } while (Exit != 'E'); 
                                             break;
                                         case 4:
                                             printf("\e[1;1H\e[2J"); // Clear screen
@@ -1667,7 +1679,8 @@ int main() {
                                             displayStack(top);
 
                                             do {
-                                                printf("\t\t\t     Type E to Exit: ");
+                                                printf("\n");
+                                                printCentered("Type E to Exit: ");
                                                 scanf(" %c", &Exit);
                                             } while (Exit != 'E');
                                             break;
@@ -3737,7 +3750,7 @@ void push(StackNode** top, int data, int maxSize) {
     newNode->data = data;
     newNode->next = *top;
     *top = newNode;
-    printf("\n\t\t\tValue %d pushed to stack.\n", data);
+    printf("\n\t\t\t   Value %d pushed to stack.\n", data);
     displayStack(*top);
 }
 
@@ -3751,7 +3764,7 @@ int pop(StackNode** top) {
     int poppedValue = temp->data;
     *top = (*top)->next;
     free(temp);
-    printf("\n\t\t\tValue %d popped from stack.\n", poppedValue);
+    printf("\n\t\t\t   Value %d popped from stack.\n", poppedValue);
     displayStack(*top);
     return poppedValue;
 }
@@ -3778,16 +3791,16 @@ int isFull(StackNode* top, int maxSize) {
 // Display all elements of the stack
 void displayStack(StackNode* top) {
     if (isEmpty(top)) {
-        printf("\n\t\t\tStack is empty.\n");
+        printCentered("Stack is Empty\n");
         return;
     }
-    printf("\n\t\t\tStack contents:\n");
+    printCentered("Stack Contents:\n");
     StackNode* temp = top;
     while (temp != NULL) {
-        printf("\t\t\t[%d]\n", temp->data);
+        printf("\t\t\t\t     [%3d]\n", temp->data);
         temp = temp->next;
     }
-    printf("\t\t\t [-] \n");
+    printf("\t\t\t\t     [---] \n");
 }
 
 // Function to initialize the queue
