@@ -24,7 +24,7 @@ typedef struct DNode {
     struct DNode *next;
 } DNode;
 
-//struct for single linked list
+//struct for circular linked list
 typedef struct CNode {
     int data;
     struct CNode* next;
@@ -41,6 +41,11 @@ typedef struct {
     int front;
     int rear;
 } Queue;
+
+// Structure to implement queue operations using a linked list
+typedef struct LLQueue {
+    Node *front, *rear;
+} LLQueue;
 
 
 // Function prototypes for the Sinle linked list
@@ -89,6 +94,17 @@ void enqueue(Queue* q, int value);
 void dequeue(Queue* q);
 int peekQ(Queue* q);
 void traverseQueue(Queue* q);
+
+// Function prototypes for the linked list-based queue
+Node* LL_createNode(int new_data);
+void LL_initializeQueue(LLQueue* q);
+bool LL_isEmptyQ(LLQueue* q);
+void LL_enqueue(LLQueue* q, int new_data);
+void LL_dequeue(LLQueue* q);
+int LL_peekFront(LLQueue* q);
+int LL_peekRear(LLQueue* q);
+void LL_traverseQueue(LLQueue* q);
+
 
 // Function to print text in the center of the terminal
 void printCentered(const char* text);
@@ -1794,6 +1810,90 @@ int main() {
 
                                     break;
                                 
+                                case 2:
+                                    LLQueue LLq;
+                                    LL_initializeQueue(&LLq);
+                                
+                                    do {
+                                        printf("\e[1;1H\e[2J"); // Clear screen
+                                        printf("\n\n\n\n\n");
+                                        printCentered("Queue Operations:\n\n");
+                                        printf("\t\t\t\t[1] Enqueue\n");
+                                        printf("\t\t\t\t[2] Dequeue\n");
+                                        printf("\t\t\t\t[3] Peek\n");
+                                        printf("\t\t\t\t[4] Display Queue\n");
+                                        printf("\t\t\t\t[5] Exit\n\n");
+                                        printCentered("Enter your choice: ");
+                                        scanf("%d", &choice);
+
+                                        switch (choice) {
+                                            case 1:
+                                                printf("\e[1;1H\e[2J"); // Clear screen
+                                                printf("\n\n\n\n\n");
+                                                printCentered("Queue:\n");
+                                                LL_traverseQueue(&LLq);
+                                                printCentered("Enter value to enqueue: ");
+                                                scanf("%d", &value);
+                                                LL_enqueue(&LLq, value);
+
+                                                do {
+                                                    printf("\n");
+                                                    printCentered("Type E to Exit: ");
+                                                    scanf(" %c", &Exit);
+                                                } while (Exit != 'E');
+                                                break;
+
+                                            case 2:
+                                                printf("\e[1;1H\e[2J"); // Clear screen
+                                                printf("\n\n\n\n\n");
+                                                printCentered("Queue:\n");  
+                                                LL_traverseQueue(&LLq);
+                                                LL_dequeue(&LLq);
+
+                                                do {
+                                                    printf("\n");
+                                                    printCentered("Type E to Exit: ");
+                                                    scanf(" %c", &Exit);
+                                                } while (Exit != 'E');
+                                                break;
+
+                                            case 3:
+                                                printf("\e[1;1H\e[2J"); // Clear screen
+                                                printf("\n\n\n\n\n");
+                                                value = LL_peekFront(&LLq);
+                                                if (value != -1) {
+                                                    printf("\n\t\t\t\tFront value: %d\n", value);
+                                                }
+                                                do {
+                                                    printf("\n");
+                                                    printCentered("Type E to Exit: ");
+                                                    scanf(" %c", &Exit);
+                                                } while (Exit != 'E');
+                                                break;
+
+                                            case 4:
+                                                printf("\e[1;1H\e[2J"); // Clear screen
+                                                printf("\n\n\n\n\n");
+                                                printCentered("Queue:\n");
+                                                LL_traverseQueue(&LLq);
+                                                do {
+                                                    printf("\n");
+                                                    printCentered("Type E to Exit: ");
+                                                    scanf(" %c", &Exit);
+                                                } while (Exit != 'E');
+                                                break;
+
+                                            case 5:
+                                                printCentered("Exiting...\n");
+                                                break;
+
+                                            default:
+                                                printf("Invalid choice!\n");
+                                        }
+                                    } while (choice != 5);
+
+                                    break;
+                                
                                 default:
                                     break;
                                 }
@@ -2501,7 +2601,7 @@ int main() {
                             case 1: 
                                 int size, target;
 
-                                printf("\nEnter the size of the integer array: ");
+                                printCentered("Enter the size of the integer array: ");
                                 scanf("%d", &size);
 
                                 int arr[MaxLength];
@@ -2524,9 +2624,7 @@ int main() {
 
                                  }
 
-                                insertionSort(arr, size);
-
-                                printf("\nEnter the target to search: ");
+                                printCentered("Enter the target to search: ");
                                 scanf("%d", &target);
                             do{
                                 printf("\e[1;1H\e[2J"); // Clear screen
@@ -2551,15 +2649,157 @@ int main() {
                                         }while (Exit != 'E');
                                         break;
                                     case 2:
-                                        printf("\e[1;1H\e[2J"); // Clear screen
+                                       do{
+                                         if (isSorted(arr, size)){
+                                            printf("\e[1;1H\e[2J");
+                                            printf("\n\n\n\n\n");
+                                            printCentered("Binary Search (char)\n");
+                                            printf("\n");
+                                            binarySearch(arr, size, target);
+                                            do
+                                            {
+                                                printf("\t\t\t    Type E to Exit: ");
+                                                scanf(" %c", &Exit);
+                                                                
+                                            }while (Exit != 'E');
+                                        } 
+                                        else {
+                                            printf("\e[1;1H\e[2J"); // Clear screen
                                         printf("\n\n\n\n\n");
-                                        binarySearch(arr, size, target);
-                                        do
-                                        {
-                                            printf("\t\t\t    Type E to Exit: ");
-                                            scanf(" %c", &Exit);
-                                                            
-                                        }while (Exit != 'E');
+                                            printCentered("Array must be sorted first!\n");
+                                            printf("\n");
+                                            printCentered("Select the type of soting algorithm:\n\n");
+                                                printf("\t\t\t   [1] Insertion Sort\n");
+                                                printf("\t\t\t   [2] Selection Sort\n");
+                                                printf("\t\t\t   [3] Bubble Sort\n");
+                                                printf("\t\t\t   [4] Counting Sort\n");
+                                                printf("\t\t\t   [5] Quick Sort\n");
+                                                printf("\t\t\t   [6] Bogo Sort\n");
+                                                printf("\t\t\t   [7] Exit\n\n");
+                                                printCentered("Enter your choice: ");
+                                                scanf("%d", &sortOption);
+
+                                                switch (sortOption) {
+                                                    case 1:
+                                                        printf("\e[1;1H\e[2J"); // Clear screen
+                                                        printf("\n\n\n\n\n");
+                                                        arrayToString(arr,size,StringInt);
+                                                        printCentered("Before Sorting:\n");
+                                                        printCentered(StringInt);
+                                                        printf("\n\n");
+                                                        insertionSort(arr,size);
+                                                        arrayToString(arr,size,StringInt);
+                                                        printCentered("After Sorting:\n");
+                                                        printCentered(StringInt);
+                                                        printf("\n\n");
+                                                        do
+                                                        {
+                                                            printf("\t\t\t    Type E to Exit: ");
+                                                            scanf(" %c", &Exit);
+                                                                            
+                                                        }while (Exit != 'E');
+                                                        break;
+                                                    case 2:
+                                                        printf("\e[1;1H\e[2J"); // Clear screen
+                                                        printf("\n\n\n\n\n");
+                                                        arrayToString(arr,size,StringInt);
+                                                        printCentered("Before Sorting:\n");
+                                                        printCentered(StringInt);
+                                                        printf("\n\n");
+                                                        selectionSort(arr,size);
+                                                        arrayToString(arr,size,StringInt);
+                                                        printCentered("After Sorting:\n");
+                                                        printCentered(StringInt);
+                                                        printf("\n\n");
+                                                        do
+                                                        {
+                                                            printf("\t\t\t    Type E to Exit: ");
+                                                            scanf(" %c", &Exit);
+                                                                            
+                                                        }while (Exit != 'E');
+                                                        break;
+                            
+                                                    case 3: // Bubble Sort
+                                                    printf("\e[1;1H\e[2J"); // Clear screen
+                                                    printf("\n\n\n\n\n");
+                                                    arrayToString(arr, size, StringInt);
+                                                    printCentered("Before Sorting:\n");
+                                                    printCentered(StringInt);
+                                                    printf("\n\n");
+                                                    bubbleSort(arr, size);
+                                                    arrayToString(arr, size, StringInt);
+                                                    printCentered("After Sorting:\n");
+                                                    printCentered(StringInt);
+                                                    printf("\n\n");
+                                                    do {
+                                                        printf("\t\t\t    Type E to Exit: ");
+                                                        scanf(" %c", &Exit);
+                                                    } while (Exit != 'E');
+                                                    break;
+
+                                                case 4: // Counting Sort
+                                                    printf("\e[1;1H\e[2J"); // Clear screen
+                                                    printf("\n\n\n\n\n");
+                                                    arrayToString(arr, size, StringInt);
+                                                    printCentered("Before Sorting:\n");
+                                                    printCentered(StringInt);
+                                                    printf("\n\n");
+                                                    int maxVal = getMaxValue(arr, size); // Automatically get the maximum value
+                                                    countingSort(arr, size, maxVal);
+                                                    arrayToString(arr, size, StringInt);
+                                                    printCentered("After Sorting:\n");
+                                                    printCentered(StringInt);
+                                                    printf("\n\n");
+                                                    do {
+                                                        printf("\t\t\t    Type E to Exit: ");
+                                                        scanf(" %c", &Exit);
+                                                    } while (Exit != 'E');
+                                                    break;
+
+
+                                                case 5: // Quick Sort
+                                                    printf("\e[1;1H\e[2J"); // Clear screen
+                                                    printf("\n\n\n\n\n");
+                                                    arrayToString(arr, size, StringInt);
+                                                    printCentered("Before Sorting:\n");
+                                                    printCentered(StringInt);
+                                                    printf("\n\n");
+                                                    quickSort(arr, 0, size - 1);
+                                                    arrayToString(arr, size, StringInt);
+                                                    printCentered("After Sorting:\n");
+                                                    printCentered(StringInt);
+                                                    printf("\n\n");
+                                                    do {
+                                                        printf("\t\t\t    Type E to Exit: ");
+                                                        scanf(" %c", &Exit);
+                                                    } while (Exit != 'E');
+                                                    break;
+                                                case 6: // Bogo Sort
+                                                    printf("\e[1;1H\e[2J"); // Clear screen
+                                                    printf("\n\n\n\n\n");
+                                                    arrayToString(arr, size, StringInt);
+                                                    printCentered("Before Sorting:\n");
+                                                    printCentered(StringInt);
+                                                    printf("\n\n");
+                                                    bogoSort(arr, size);
+                                                    arrayToString(arr, size, StringInt);
+                                                    printCentered("After Sorting:\n");
+                                                    printCentered(StringInt);
+                                                    printf("\n\n");
+                                                    do {
+                                                        printf("\t\t\t    Type E to Exit: ");
+                                                        scanf(" %c", &Exit);
+                                                    } while (Exit != 'E');
+                                                    break;
+                                                case 7:
+                                                    break;
+
+                                                default:
+                                                        printf("\nInvalid choice. Returning to main menu.\n");
+                                                }
+                                            }
+                                        }while(sortOption != 7 && !isSorted(arr, size));
+                                    
                                         break;
                                     case 3:
                                         break;
@@ -2598,16 +2838,6 @@ int main() {
 
                                  }
 
-                                // Sorting for Binary Search (Bubble Sort)
-                                for (int i = 0; i < sizeC - 1; i++) {
-                                    for (int j = 0; j < sizeC - i - 1; j++) {
-                                        if (arrC[j] > arrC[j + 1]) {
-                                            char temp = arrC[j];
-                                            arrC[j] = arrC[j + 1];
-                                            arrC[j + 1] = temp;
-                                        }
-                                    }
-                                }
 
                                 printf("\nEnter the target character to search: ");
                                 scanf(" %c", &targetC); // Use " %c" to handle whitespaces
@@ -2634,14 +2864,147 @@ int main() {
                                             }while (Exit != 'E');
                                             break;
                                         case 2:
-                                            printf("\e[1;1H\e[2J"); //Regex to Clear the screen
-                                            printf("\n\n\n\n\n");
-                                            binarySearchChar(arrC, sizeC, targetC);
-                                            do{
-                                            printf("\t\t\t    Type E to Exit: ");
-                                            scanf(" %c", &Exit);
+
+                                            if (charisSorted(arrC, sizeC))
+                                            {
+                                                 printf("\e[1;1H\e[2J"); //Regex to Clear the screen
+                                                printf("\n\n\n\n\n");
+                                                binarySearchChar(arrC, sizeC, targetC);
+                                                do{
+                                                printf("\t\t\t    Type E to Exit: ");
+                                                scanf(" %c", &Exit);
+                                                                
+                                                }while (Exit != 'E');
+                                            } else{
+                                                do {
+                                                    printf("\e[1;1H\e[2J"); // Clear screen
+                                                    printf("\n\n\n\n\n");
+                                                    printCentered("Array must be sorted first!\n");
+                                                    printCentered("Select the type of sorting algorithm:\n\n");
+                                                    printf("\t\t\t   [1] Insertion Sort\n");
+                                                    printf("\t\t\t   [2] Selection Sort\n");
+                                                    printf("\t\t\t   [3] Bubble Sort\n");
+                                                    printf("\t\t\t   [4] Counting Sort\n");
+                                                    printf("\t\t\t   [5] Quick Sort\n");
+                                                    printf("\t\t\t   [6] Bogo Sort\n");
+                                                    printf("\t\t\t   [7] Exit\n\n");
+                                                    printCentered("Enter your choice: ");
+                                                    scanf("%d", &sortOption);
+
+                                                    switch (sortOption) {
+                                                        case 1:
+                                                            printf("\e[1;1H\e[2J"); // Clear screen
+                                                            printf("\n\n\n\n\n");
+                                                            chararrayToString(arrC, sizeC, StringInt);
                                                             
-                                            }while (Exit != 'E');
+                                                            printCentered("Before Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            charInsertionSort(arrC, sizeC);
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("After Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            do {
+                                                                printf("\t\t\t    Type E to Exit: ");
+                                                                scanf(" %c", &Exit);
+                                                            } while (Exit != 'E');
+                                                            break;
+                                                        case 2: // Selection Sort
+                                                            printf("\e[1;1H\e[2J");
+                                                            printf("\n\n\n\n\n");
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("Before Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            charSelectionSort(arrC, sizeC);
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("After Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            break;
+                                                        case 3: // Bubble Sort
+                                                            printf("\e[1;1H\e[2J"); // Clear screen
+                                                            printf("\n\n\n\n\n");
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("Before Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            charBubbleSort(arrC, sizeC);  // Bubble sort call
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("After Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            do {
+                                                                printf("\t\t\t    Type E to Exit: ");
+                                                                scanf(" %c", &Exit);
+                                                            } while (Exit != 'E');
+                                                            break;
+
+                                                        case 4: // Counting Sort
+                                                            printf("\e[1;1H\e[2J"); // Clear screen
+                                                            printf("\n\n\n\n\n");
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("Before Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            charCountingSort(arrC, sizeC);  // Counting sort call
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("After Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            do {
+                                                                printf("\t\t\t    Type E to Exit: ");
+                                                                scanf(" %c", &Exit);
+                                                            } while (Exit != 'E');
+                                                            break;
+
+                                                        case 5: // Quick Sort
+                                                            printf("\e[1;1H\e[2J"); // Clear screen
+                                                            printf("\n\n\n\n\n");
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("Before Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            charQuickSort(arrC, 0, sizeC - 1);  // Quick sort call
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("After Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            do {
+                                                                printf("\t\t\t    Type E to Exit: ");
+                                                                scanf(" %c", &Exit);
+                                                            } while (Exit != 'E');
+                                                            break;
+
+                                                        case 6: // Bogo Sort
+                                                            printf("\e[1;1H\e[2J"); // Clear screen
+                                                            printf("\n\n\n\n\n");
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("Before Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            charBogoSort(arrC, sizeC);  // Bogo sort call
+                                                            chararrayToString(arrC, sizeC, StringInt);
+                                                            printCentered("After Sorting:\n");
+                                                            printCentered(StringInt);
+                                                            printf("\n\n");
+                                                            do {
+                                                                printf("\t\t\t    Type E to Exit: ");
+                                                                scanf(" %c", &Exit);
+                                                            } while (Exit != 'E');
+                                                            break;
+                                                        case 7:
+                                                            break;
+
+                                                        default:
+                                                            printf("\nInvalid choice. Returning to main menu.\n");
+                                                    }
+
+                                                } while (sortOption != 7 && !charisSorted(arrC, sizeC));
+                                            }
+                                            
+                                           
                                             break;
                                         case 3:
                                             break;
@@ -3044,33 +3407,18 @@ void bogoSort(int arr[], int n) {
 void charInsertionSort(char arr[], int n) {
 
     for (int i = 1; i < n; i++) {
-
         char key = arr[i];
-
         int j = i - 1;
-
-
         while (j >= 0 && arr[j] > key) {
-
             arr[j + 1] = arr[j];
-
             j--;
-
         }
-
         arr[j + 1] = key;
-
-
-        printCentered("Iteration");
-
+        printCentered(" Iteration");
         printf(" %d:\n", i);
-
         char s[100];
-
         chararrayToString(arr, n, s);
-
         printCentered(s);
-
         printf("\n");
 
     }
@@ -3081,36 +3429,20 @@ void charInsertionSort(char arr[], int n) {
 void charSelectionSort(char arr[], int size) {
 
     for (int i = 0; i < size - 1; i++) {
-
         int minIndex = i;
-
         for (int j = i + 1; j < size; j++) {
-
             if (arr[j] < arr[minIndex]) {
-
                 minIndex = j;
-
             }
-
         }
-
         char temp = arr[i];
-
         arr[i] = arr[minIndex];
-
         arr[minIndex] = temp;
-
-
         printCentered("Iteration");
-
         printf(" %d:\n", i + 1);
-
         char s[100];
-
         chararrayToString(arr, size, s);
-
         printCentered(s);
-
         printf("\n");
 
     }
@@ -3121,32 +3453,20 @@ void charSelectionSort(char arr[], int size) {
 void charBubbleSort(char arr[], int size) {
 
     for (int i = 0; i < size - 1; i++) {
-
         for (int j = 0; j < size - i - 1; j++) {
-
             if (arr[j] > arr[j + 1]) {
-
                 char temp = arr[j];
-
                 arr[j] = arr[j + 1];
-
                 arr[j + 1] = temp;
-
             }
 
         }
 
-
         printCentered("Iteration");
-
         printf(" %d:\n", i + 1);
-
         char s[100];
-
         chararrayToString(arr, size, s);
-
         printCentered(s);
-
         printf("\n");
 
     }
@@ -3157,51 +3477,41 @@ void charBubbleSort(char arr[], int size) {
 void charCountingSort(char arr[], int size) {
 
     int count[256] = {0};
-
     char output[size];
-
     char maxVal = chargetMaxValue(arr, size);
 
 
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i <= maxVal; i++) {
+        count[i] = 0;
+    }
 
+    for (int i = 0; i< size -1; i++)
+    {
+        if (arr[i] < 0 || arr[i] >maxVal)
+        {
+            fprintf(stderr, "error: Element %d out of range (0-%d)\n", arr[i], maxVal);
+            exit(1);
+        }
+        
         count[arr[i]]++;
-
     }
 
-
-    for (int i = 1; i <= maxVal; i++) {
-
-        count[i] += count[i - 1];
-
-    }
-
-
-    for (int i = size - 1; i >= 0; i--) {
-
-        output[count[arr[i]] - 1] = arr[i];
-
-        count[arr[i]]--;
-
-    }
-
-
-    for (int i = 0; i < size; i++) {
-
-        arr[i] = output[i];
-
-    }
-
-
-    printCentered("Sorted Output:\n");
-
-    char s[100];
-
-    chararrayToString(arr, size, s);
-
+    printCentered("Count Array after Counting:\n");
+    char s[MaxLength];
+    chararrayToString(arr, MaxLength -1, s);
     printCentered(s);
-
     printf("\n");
+
+    for (int i = 1; i <= MaxLength; i++)
+    {
+        count[i] += count[i-1];
+    }
+
+    printCentered("Cumulative Count Array:\n");
+    arrayToString(count, MaxLength+1, s);
+    printCentered(s);
+     printf("\n");
+    
 
 }
 
@@ -3209,24 +3519,15 @@ void charCountingSort(char arr[], int size) {
 void charQuickSort(char arr[], int low, int high) {
 
     if (low < high) {
-
         int pi = charpartition(arr, low, high);
 
-        
-
         printCentered("Quick Sort Partition Step:\n");
-
         char stepStr[100];
-
         chararrayToString(arr + low, high - low + 1, stepStr);
-
         printCentered(stepStr);
-
         printf("\n");
 
-
         charQuickSort(arr, low, pi - 1);
-
         charQuickSort(arr, pi + 1, high);
 
     }
@@ -3235,31 +3536,19 @@ void charQuickSort(char arr[], int low, int high) {
 
 
 void charBogoSort(char arr[], int size) {
-
     while (!charisSorted(arr, size)) {
-
         for (int i = 0; i < size; i++) {
-
             int randomIndex = rand() % size;
-
             char temp = arr[i];
-
             arr[i] = arr[randomIndex];
-
             arr[randomIndex] = temp;
-
         }
 
         printCentered("Shuffling Array:\n");
-
         char s[100];
-
         chararrayToString(arr, size, s);
-
         printCentered(s);
-
         printf("\n");
-
     }
 
 }
@@ -3860,10 +4149,104 @@ void traverseQueue(Queue* q) {
 
     printf("\n\tCurrent Queue: ");
     for (int i = q->front + 1; i < q->rear; i++) {
-        printf("%d ", q->items[i]);
+        printf("%2d ", q->items[i]);
     }
     printf("\n");
 }
+
+
+//LinkedList Queue
+//Function to create a linked list node
+Node* LL_createNode(int new_data) {
+    Node* new_node = (Node*)malloc(sizeof(Node));
+    new_node->data = new_data;
+    new_node->next = NULL;
+    return new_node;
+}
+
+// Function to initialize the queue
+void LL_initializeQueue(LLQueue* q) {
+    q->front = NULL;
+    q->rear = NULL;
+}
+
+// Function to check if the queue is empty
+bool LL_isEmptyQ(LLQueue* q) {
+    return (q->front == NULL && q->rear == NULL);
+}
+
+// Function to add an element to the queue (Enqueue operation)
+void LL_enqueue(LLQueue* q, int new_data) {
+    Node* new_node = LL_createNode(new_data);
+
+    if (q->rear == NULL) {
+        q->front = q->rear = new_node;
+        printCentered("Value enqueued\n");
+        LL_traverseQueue(q);
+        return;
+    }
+
+    q->rear->next = new_node;
+    q->rear = new_node;
+    printCentered("Value enqueued\n");
+    LL_traverseQueue(q);
+}
+
+// Function to remove an element from the queue (Dequeue operation)
+void LL_dequeue(LLQueue* q) {
+    if (LL_isEmptyQ(q)) {
+        printCentered("Queue is empty\n");
+        return;
+    }
+
+    Node* temp = q->front;
+    q->front = q->front->next;
+
+    if (q->front == NULL) {
+        q->rear = NULL;
+    }
+
+    free(temp);
+    printCentered("Value dequeued\n");
+    LL_traverseQueue(q);
+}
+
+// Function to get the front element of the queue (Peek operation)
+int LL_peekFront(LLQueue* q) {
+    if (LL_isEmptyQ(q)) {
+        printCentered("Queue is empty\n");
+        return -1; // return some default value or handle error differently
+    }
+    return q->front->data;
+}
+
+// Function to get the rear element of the queue
+int LL_peekRear(LLQueue* q) {
+    if (LL_isEmptyQ(q)) {
+        printCentered("Queue is empty\n");
+        return -1; // return some default value or handle error differently
+    }
+    return q->rear->data;
+}
+
+// Function to print the current queue
+void LL_traverseQueue(LLQueue* q) {
+    if (LL_isEmptyQ(q)) {
+        printCentered("Queue is empty\n");
+        return;
+    }
+
+    printf("\n\tCurrent Queue: ");
+    Node* temp = q->front;
+    while (temp != NULL) {
+        printf("%2d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+
+
 
 
 
