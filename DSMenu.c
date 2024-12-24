@@ -94,7 +94,7 @@ int isFull(StackNode* top, int maxSize);
 void displayStack(StackNode* top);
 
 
-
+// Function prototypes for the queue
 void initializeQueue(Queue* q);
 bool isEmptyQ(Queue* q);
 bool isFullQ(Queue* q);
@@ -122,31 +122,7 @@ void chararrayToString(char arr[], int size, char *result);
 // Function to print a welcome message with centered text
 void PrintWelcome();
 
-
-void traverseArray(int arr[], int size){
-    char Exit;
-
-    printf("\e[1;1H\e[2J"); //Regex to Clear the screen
-    printf("\n\n\n\n\n");
-    printf("\t\t\t\tTraversing Array:\n\n");
-    for(int i = 0; i < size; i++){
-        printf("\t\t\t\t  Index %d: [%d]\n", i, arr[i]);
-        usleep((__useconds_t)(0.5 * 1e6));
-    }
-                                   
-}
-
-void traverseCharArray(char arr[], int size) {
-    char Exit;
-
-    printf("\e[1;1H\e[2J"); //Regex to Clear the screen
-    printf("\n\n\n\n\n");
-    printf("\t\t\t\tTraversing Array:\n\n");
-    for(int i = 0; i < size; i++){
-        printf("\t\t\t\t  Index %c: [%c]\n", i, arr[i]);
-        usleep((__useconds_t)(0.5 * 1e6));
-    }
-}
+// Function prototypes for the binary tree
 
 // Function for binary search on a sorted array
 void binarySearch(int arr[], int size, int target);
@@ -183,7 +159,7 @@ void IntMergeArray(int* arr1, int size1, int* arr2, int size2, int* mergeArray);
 
 
 
-//Function prototypes for strings
+//Function prototypes for chars and strings
 int stringLength(const char *str);
 int MycharAt(const char* str, char ch);
 int findSubstringIndex(const char *str, const char *substr);
@@ -192,238 +168,29 @@ void deleteChars(char *str, int pos, int numChars);
 char* concatenateStrings(const char *str1, const char *str2);
 int compareStrings(const char *str1, const char *str2);
 
+void traverseArray(int arr[], int size);
+void traverseCharArray(char arr[], int size);
+
 void StringsTraverse(char Strings[][Maxletters], int size);
 void StringsInsert(char Strings[][Maxletters], int* size);
 void StringsDelete(char Strings[][Maxletters], int* size);
 void StringsSearch(char Strings[][Maxletters], int size);
 void StringsSort(char Strings[][Maxletters], int size);
-void StringsMerge(char Strings1[][Maxletters], int size1, char Strings2[][Maxletters], int size2);
+void StringsMerge(char Strings1[][Maxletters], int *size1, char Strings2[][Maxletters], int size2);
+
+// Function prototypes for the binary tree
 
 
-TreeNode* createNode(int data) {
-    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
-    newNode->data = data;
-    newNode->left = NULL;
-    newNode->right = NULL;
-    return newNode;
-}
-
-void insert(TreeNode** root, int data) {
-    TreeNode* newNode = createNode(data);
-    if (*root == NULL) {
-        *root = newNode;
-        return;
-    }
-
-    TreeNode* temp;
-    TreeNode* queue[100];
-    int front = -1, rear = -1;
-    queue[++rear] = *root;
-
-    while (front != rear) {
-        temp = queue[++front];
-
-        if (temp->left == NULL) {
-            temp->left = newNode;
-            return;
-        } else {
-            queue[++rear] = temp->left;
-        }
-
-        if (temp->right == NULL) {
-            temp->right = newNode;
-            return;
-        } else {
-            queue[++rear] = temp->right;
-        }
-    }
-}
-
-TreeNode* getDeepestRightmostNode(TreeNode* root) {
-    TreeNode* temp;
-    TreeNode* queue[100];
-    int front = -1, rear = -1;
-    queue[++rear] = root;
-
-    while (front != rear) {
-        temp = queue[++front];
-
-        if (temp->left != NULL) {
-            queue[++rear] = temp->left;
-        }
-
-        if (temp->right != NULL) {
-            queue[++rear] = temp->right;
-        }
-    }
-    return temp;
-}
-
-void deleteDeepestRightmostNode(TreeNode* root, TreeNode* dNode) {
-    TreeNode* temp;
-    TreeNode* queue[100];
-    int front = -1, rear = -1;
-    queue[++rear] = root;
-
-    while (front != rear) {
-        temp = queue[++front];
-
-        if (temp == dNode) {
-            temp = NULL;
-            free(dNode);
-            return;
-        }
-
-        if (temp->right != NULL) {
-            if (temp->right == dNode) {
-                temp->right = NULL;
-                free(dNode);
-                return;
-            } else {
-                queue[++rear] = temp->right;
-            }
-        }
-
-        if (temp->left != NULL) {
-            if (temp->left == dNode) {
-                temp->left = NULL;
-                free(dNode);
-                return;
-            } else {
-                queue[++rear] = temp->left;
-            }
-        }
-    }
-}
-
-void deleteNode(TreeNode** root, int data) {
-    if (*root == NULL) {
-        printf("Tree is empty.\n");
-        return;
-    }
-
-    if ((*root)->left == NULL && (*root)->right == NULL) {
-        if ((*root)->data == data) {
-            free(*root);
-            *root = NULL;
-            return;
-        } else {
-            printf("Node not found.\n");
-            return;
-        }
-    }
-
-    TreeNode* temp;
-    TreeNode* queue[100];
-    int front = -1, rear = -1;
-    queue[++rear] = *root;
-    TreeNode* keyNode = NULL;
-
-    while (front != rear) {
-        temp = queue[++front];
-
-        if (temp->data == data) {
-            keyNode = temp;
-        }
-
-        if (temp->left != NULL) {
-            queue[++rear] = temp->left;
-        }
-
-        if (temp->right != NULL) {
-            queue[++rear] = temp->right;
-        }
-    }
-
-    if (keyNode != NULL) {
-        TreeNode* deepestNode = getDeepestRightmostNode(*root);
-        keyNode->data = deepestNode->data;
-        deleteDeepestRightmostNode(*root, deepestNode);
-    } else {
-        printf("Node not found.\n");
-    }
-}
-
-TreeNode* search(TreeNode* root, int data) {
-    if (root == NULL) {
-        return NULL;
-    }
-
-    TreeNode* temp;
-    TreeNode* queue[100];
-    int front = -1, rear = -1;
-    queue[++rear] = root;
-
-    while (front != rear) {
-        temp = queue[++front];
-
-        if (temp->data == data) {
-            return temp;
-        }
-
-        if (temp->left != NULL) {
-            queue[++rear] = temp->left;
-        }
-
-        if (temp->right != NULL) {
-            queue[++rear] = temp->right;
-        }
-    }
-    return NULL;
-}
-
-void inorderTraversal(TreeNode* root) {
-    if (root == NULL) {
-        return;
-    }
-
-    inorderTraversal(root->left);
-    printf("%d ", root->data);
-    inorderTraversal(root->right);
-}
-
-void preorderTraversal(TreeNode* root) {
-    if (root == NULL) {
-        return;
-    }
-
-    printf("%d ", root->data);
-    preorderTraversal(root->left);
-    preorderTraversal(root->right);
-}
-
-void postorderTraversal(TreeNode* root) {
-    if (root == NULL) {
-        return;
-    }
-
-    postorderTraversal(root->left);
-    postorderTraversal(root->right);
-    printf("%d ", root->data);
-}
-
-
-// Function to print the tree structure
-void printTreeStructure(TreeNode* node, int depth) {
-    int i;
-    if (node == NULL) {
-        return;
-    }
-
-    printf("\t\t\t\t");
-
-    for (i = 0; i < depth; i++) {
-        printf("    ");
-    }
-    
-    if (i == 0)
-        printf("|-- %d (Root)\n", node->data);
-    else
-        printf("|-- %d\n", node->data);
-
-    printTreeStructure(node->left, depth + 1);
-    printTreeStructure(node->right, depth + 1);
-}
+TreeNode* createNode(int data);
+void insert(TreeNode** root, int data);
+TreeNode* getDeepestRightmostNode(TreeNode* root);
+void deleteDeepestRightmostNode(TreeNode* root, TreeNode* dNode);
+void deleteNode(TreeNode** root, int data);
+TreeNode* search(TreeNode* root, int data);
+void inorderTraversal(TreeNode* root);
+void preorderTraversal(TreeNode* root);
+void postorderTraversal(TreeNode* root);
+void printTreeStructure(TreeNode* node, int depth);
 
 
 
@@ -443,22 +210,25 @@ void printTreeStructure(TreeNode* node, int depth) {
 
 void resize_terminal() {
 #ifdef _WIN32
-    // Windows-specific terminal resizing
-    CONSOLE_SCREEN_BUFFER_INFOEX bufferInfo;
-    bufferInfo.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
-
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hConsole == INVALID_HANDLE_VALUE) {
+        fprintf(stderr, "Error: Invalid console handle\n");
+        return;
+    }
+
+    CONSOLE_SCREEN_BUFFER_INFOEX bufferInfo = {0};
+    bufferInfo.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
 
     if (!GetConsoleScreenBufferInfoEx(hConsole, &bufferInfo)) {
         fprintf(stderr, "Error: Unable to get console screen info\n");
         return;
     }
 
-    // Set the terminal size to 80x24
+    // Set terminal size to 80x24 with additional buffer height
     bufferInfo.dwSize.X = 80;  // Columns
-    bufferInfo.dwSize.Y = 500; // Set a larger buffer height so scrolling works
-    bufferInfo.srWindow.Right = 79; // 0-based, so 80 columns means 79 is the max index
-    bufferInfo.srWindow.Bottom = 23; // 0-based, so 24 rows means 23 is the max index
+    bufferInfo.dwSize.Y = 500; // Buffer height
+    bufferInfo.srWindow.Right = 79; // 0-based indexing
+    bufferInfo.srWindow.Bottom = 23; // 24 rows max (0-based indexing)
     bufferInfo.srWindow.Left = 0;
     bufferInfo.srWindow.Top = 0;
 
@@ -467,52 +237,47 @@ void resize_terminal() {
     }
 
 #elif defined(__unix__) || defined(__APPLE__)
-    // Unix-based systems (Linux and macOS) terminal resizing
-    struct winsize ws;
-
+    struct winsize ws = {0};
     ws.ws_col = 80; // Columns
     ws.ws_row = 24; // Rows
-    ws.ws_xpixel = 0;
-    ws.ws_ypixel = 0;
 
-    // Use ioctl to modify the terminal size
+    // Attempt to set terminal size
     if (ioctl(STDOUT_FILENO, TIOCSWINSZ, &ws) == -1) {
         perror("ioctl");
-        fprintf(stderr, "Error: Unable to resize terminal\n");
+        fprintf(stderr, "Error: Unable to resize terminal. Check permissions or terminal environment.\n");
         return;
     }
 
-    // Additional terminal resize escape sequence
+    // Optional: Additional escape sequence for compatibility
     printf("\033[8;24;80t");
 
 #else
-    // Non-supported OS
+    // For unsupported platforms
     fprintf(stderr, "Error: Terminal resizing not supported on this platform\n");
 #endif
 }
 
 
 
-
 int main() {
 
-    int PressAnyKey;
-    int DSAOption;
-    int LSDOption;
-    int NLSDOption;
-    int TreeOperations;
-    int SizeOfArray;
-    int SizeOfArray2;
-    char StringInt[100];
-    int ArrayOperationOption;
-    int SeachTarget;
+    int PressAnyKey = 0;
+    int DSAOption = 0;
+    int LSDOption = 0;
+    int NLSDOption = 0;
+    int TreeOperations = 0;
+    int SizeOfArray = 0;
+    int SizeOfArray2 = 0;
+    char StringInt[100] = {0};
+    int ArrayOperationOption = 0;
+    int SeachTarget = 0;
     char Exit;
-    int StringOperationOption;
-    int typeOfArrayOption;
-    int sortOption, size;
+    int StringOperationOption = 0;
+    int typeOfArrayOption = 0;
+    int sortOption= 0, size = 0;
     
     int Array2[SizeOfArray2];
-    int mergedArray[SizeOfArray +SizeOfArray2];
+    int mergedArray[MaxLength];
      // Declare and initialize character array and other variables
     char cArray[MaxLength] = {0}; // Character array
     char s[MaxLength] = {0};
@@ -538,12 +303,14 @@ int main() {
     char CompareString[MaxLength];
     char insertString[MaxLength];
     char Strings[Maxletters][Maxletters];
-    char Strings2[Maxletters][Maxletters];
+ 
 
 
     bool exit = false;
     
-    resize_terminal();
+    printf("Before calling resize_terminal()\n");
+resize_terminal();
+printf("After calling resize_terminal()\n");
     while (!exit)
     {
         
@@ -561,7 +328,7 @@ int main() {
                 printf("\t\t\t[2] Non - Linear Data Structures\n");
                 printf("\t\t\t[3] Strings\n");
                 printf("\t\t\t[4] Sorting Algorithms\n");
-                printf("\t\t\t[5] Seaching Algorithms\n");
+                printf("\t\t\t[5] Searching Algorithms\n");
                 printf("\t\t\t[6] Exit\n");
 
                 printf("\n\n\t\t\tChoose an Option: ");
@@ -1519,7 +1286,7 @@ int main() {
                                 switch (ArrayOperationOption)
                                 {
                                      case 1:
-                                         printf("\e[1;1H\e[2J"); //Regex to Clear the screen
+                                        printf("\e[1;1H\e[2J"); //Regex to Clear the screen
                                         printf("\n\n\n\n\n");
                                         StringsTraverse(Strings, SizeOfArray);
                                         do {
@@ -1577,9 +1344,42 @@ int main() {
                                         } while (Exit != 'E');
                                         break;
 
-                                    case 6: {
-                                       
-                                    }
+                                    case 6: 
+                                        int SizeOfSecondString = 0;
+                                        char Strings2[Maxletters][Maxletters];
+                                        
+                                        printf("\e[1;1H\e[2J"); //Regex to Clear the screen
+                                        printf("\n\n\n\n\n");
+                                        printCentered("Enter size of the Second Array: ");
+                                        scanf("%d", &SizeOfSecondString);
+                                        
+ 
+                                        for (int j = 0; j < SizeOfSecondString; j++)
+                                        {
+                                            printf("\e[1;1H\e[2J"); //Regex to Clear the screen
+                                            printf("\n\n\n\n\n");
+                                            if( j >= 1)
+                                            {
+                                                printCentered("Previouse element: ");
+                                                printf("%s\n", Strings2[j - 1]);
+                                            }
+                                            printf("\n\n");
+                                            printCentered("Index [");
+                                            printf("%d]\n", j);
+                                            printCentered("Enter Array element: ");
+                                            scanf(" %[^\n]", Strings2[j]);
+                                            printf("\n\n\n\n\n");
+
+                                        }
+
+                                        StringsMerge(Strings, &SizeOfArray, Strings2, SizeOfSecondString);
+
+                                        do {
+                                            printCentered("Type E to Exit: ");
+                                            scanf(" %c", &Exit);
+                                        } while (Exit != 'E');
+
+                                        break;
 
                                     case 7:
                                         break;
@@ -2799,8 +2599,7 @@ int main() {
                         printCentered("Select the type of data to use the sorting algorithms:\n\n");
                         printf("\t\t\t   [1] Integer Array\n");
                         printf("\t\t\t   [2] Character Array\n");
-                        printf("\t\t\t   [3] Strings\n");
-                        printf("\t\t\t   [4] Exit\n\n");
+                        printf("\t\t\t   [3] Exit\n\n");
                         printCentered("Enter your choice: ");
                         scanf("%d", &dataTypeSearch);
 
@@ -3124,7 +2923,7 @@ int main() {
                             break;
                         }
 
-                    } while (dataTypeSearch != 4);
+                    } while (dataTypeSearch != 3);
                     
                     break;
                 case 5:
@@ -3142,8 +2941,7 @@ int main() {
                         printCentered("Select the type of data to use the searching algorithms:\n\n");
                         printf("\t\t\t   [1] Integer Array\n");
                         printf("\t\t\t   [2] Character Array\n");
-                        printf("\t\t\t   [3] Strings\n");
-                        printf("\t\t\t   [4] Exit\n\n");
+                        printf("\t\t\t   [3] Exit\n\n");
                         printCentered("Enter your choice: ");
                         scanf("%d", &dataTypeSearch);
 
@@ -3576,12 +3374,34 @@ int main() {
                         }
 
 
-                    } while (dataTypeSearch != 4);
+                    } while (dataTypeSearch != 3);
 
         
                     break;
                 case 6:
-                    exit = true;
+                    printf("\e[1;1H\e[2J"); //Regex to Clear the screen
+                    printf("\n\n\n\n\n");
+                    char exitChoice;
+                    printCentered("Are you sure you want to exit the program?\n");
+                    printCentered("[Y]es or [N]o\n\n");
+                    printCentered("Enter your choice: ");
+                    scanf(" %c", &exitChoice);
+
+                    if (exitChoice == 'Y' || exitChoice == 'y') {
+                        printf("\e[1;1H\e[2J"); //Regex to Clear the screen
+                        printf("\n\n\n\n\n");
+                        printCentered("Thank you for using the program!\n");
+                        printf("\n\n\n\n\n");
+                        exit = true;
+                    }else
+                    {
+                        printf("\e[1;1H\e[2J"); //Regex to Clear the screen
+                        printf("\n\n\n\n\n");
+                        printCentered("Returning to main menu.\n");
+                        DSAOption = 0;
+                        sleep(2);
+                    }
+                    
                     break;
                 
                 default:
@@ -4905,6 +4725,32 @@ void deleteChars(char *str, int pos, int numChars) {
     str[len - numChars] = '\0';
 }
 
+void traverseArray(int arr[], int size){
+    char Exit;
+
+    printf("\e[1;1H\e[2J"); //Regex to Clear the screen
+    printf("\n\n\n\n\n");
+    printf("\t\t\t\tTraversing Array:\n\n");
+    for(int i = 0; i < size; i++){
+        printf("\t\t\t\t  Index %d: [%d]\n", i, arr[i]);
+        usleep((__useconds_t)(0.5 * 1e6));
+    }
+                                   
+}
+
+void traverseCharArray(char arr[], int size) {
+    char Exit;
+
+    printf("\e[1;1H\e[2J"); //Regex to Clear the screen
+    printf("\n\n\n\n\n");
+    printf("\t\t\t\tTraversing Array:\n\n");
+    for(int i = 0; i < size; i++){
+        printf("\t\t\t\t  Index %c: [%c]\n", i, arr[i]);
+        usleep((__useconds_t)(0.5 * 1e6));
+    }
+}
+
+
 char* concatenateStrings(const char *str1, const char *str2) {
     // Calculate the length of the new string
     int len1 = stringLength(str1);
@@ -4940,6 +4786,16 @@ int compareStrings(const char *str1, const char *str2) {
     return *(unsigned char *)str1 - *(unsigned char *)str2;
 }
 
+void StringCopy(char* dest, const char* src) {
+    while (*src) {
+        *dest = *src;
+        dest++;
+        src++;
+    }
+    *dest = '\0'; // Null-terminate the string
+}
+
+
 void StringsTraverse(char Strings[][Maxletters], int size) {
     printCentered("Array Contents:\n\n");
     for (int i = 0; i < size; i++) {
@@ -4966,7 +4822,7 @@ void StringsInsert(char Strings[][Maxletters], int* size) {
     for (int i = *size; i > pos; i--) {
         strcpy(Strings[i], Strings[i - 1]);
     }
-    strcpy(Strings[pos], newElement);
+    StringCopy(Strings[pos], newElement);
     (*size)++;
 }
 
@@ -5006,11 +4862,11 @@ void StringsSearch(char Strings[][Maxletters], int size) {
 void StringsSort(char Strings[][Maxletters], int size) {
     for (int i = 0; i < size - 1; i++) {
         for (int j = 0; j < size - i - 1; j++) {
-            if (strcmp(Strings[j], Strings[j + 1]) > 0) {
+            if (compareStrings(Strings[j], Strings[j + 1]) > 0) {
                 char temp[Maxletters];
-                strcpy(temp, Strings[j]);
-                strcpy(Strings[j], Strings[j + 1]);
-                strcpy(Strings[j + 1], temp);
+                StringCopy(temp, Strings[j]);
+                StringCopy(Strings[j], Strings[j + 1]);
+                StringCopy(Strings[j + 1], temp);
             }
         }
     }
@@ -5020,13 +4876,252 @@ void StringsSort(char Strings[][Maxletters], int size) {
 
 }
 
-void StringsMerge(char Strings1[][Maxletters], int size1, char Strings2[][Maxletters], int size2) {
-    if (size1 + size2 > Maxletters) {
-        printf("Merged array size exceeds maximum limit.\n");
+
+void StringsMerge(char Strings1[][Maxletters], int *size1, char Strings2[][Maxletters], int size2) {
+    // Check if the merged size exceeds the maximum limit
+    if (*size1 + size2 > Maxletters) {
+        printCentered("Merged array size exceeds maximum limit.\n");
         return;
     }
+    // Merge Strings2 into Strings1
     for (int i = 0; i < size2; i++) {
-        strcpy(Strings1[size1 + i], Strings2[i]);
+        // Ensure that Strings2[i] is not empty before copying
+        if (stringLength(Strings2[i]) > 0) {
+            StringCopy(Strings1[*size1 + i], Strings2[i]); 
+
+        } else {
+            printf("\t\t\tWarning: Attempted to copy an empty string from Strings2 at index %d\n", i);
+        }
     }
-    printf("Arrays merged successfully.\n");
+    *size1 += size2;
+    printCentered("Arrays merged successfully.\n");
 }
+
+
+
+
+TreeNode* createNode(int data) {
+    TreeNode* newNode = (TreeNode*)malloc(sizeof(TreeNode));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+void insert(TreeNode** root, int data) {
+    TreeNode* newNode = createNode(data);
+    if (*root == NULL) {
+        *root = newNode;
+        return;
+    }
+
+    TreeNode* temp;
+    TreeNode* queue[100];
+    int front = -1, rear = -1;
+    queue[++rear] = *root;
+
+    while (front != rear) {
+        temp = queue[++front];
+
+        if (temp->left == NULL) {
+            temp->left = newNode;
+            return;
+        } else {
+            queue[++rear] = temp->left;
+        }
+
+        if (temp->right == NULL) {
+            temp->right = newNode;
+            return;
+        } else {
+            queue[++rear] = temp->right;
+        }
+    }
+}
+
+TreeNode* getDeepestRightmostNode(TreeNode* root) {
+    TreeNode* temp;
+    TreeNode* queue[100];
+    int front = -1, rear = -1;
+    queue[++rear] = root;
+
+    while (front != rear) {
+        temp = queue[++front];
+
+        if (temp->left != NULL) {
+            queue[++rear] = temp->left;
+        }
+
+        if (temp->right != NULL) {
+            queue[++rear] = temp->right;
+        }
+    }
+    return temp;
+}
+
+void deleteDeepestRightmostNode(TreeNode* root, TreeNode* dNode) {
+    TreeNode* temp;
+    TreeNode* queue[100];
+    int front = -1, rear = -1;
+    queue[++rear] = root;
+
+    while (front != rear) {
+        temp = queue[++front];
+
+        if (temp == dNode) {
+            temp = NULL;
+            free(dNode);
+            return;
+        }
+
+        if (temp->right != NULL) {
+            if (temp->right == dNode) {
+                temp->right = NULL;
+                free(dNode);
+                return;
+            } else {
+                queue[++rear] = temp->right;
+            }
+        }
+
+        if (temp->left != NULL) {
+            if (temp->left == dNode) {
+                temp->left = NULL;
+                free(dNode);
+                return;
+            } else {
+                queue[++rear] = temp->left;
+            }
+        }
+    }
+}
+
+void deleteNode(TreeNode** root, int data) {
+    if (*root == NULL) {
+        printf("Tree is empty.\n");
+        return;
+    }
+
+    if ((*root)->left == NULL && (*root)->right == NULL) {
+        if ((*root)->data == data) {
+            free(*root);
+            *root = NULL;
+            return;
+        } else {
+            printf("Node not found.\n");
+            return;
+        }
+    }
+
+    TreeNode* temp;
+    TreeNode* queue[100];
+    int front = -1, rear = -1;
+    queue[++rear] = *root;
+    TreeNode* keyNode = NULL;
+
+    while (front != rear) {
+        temp = queue[++front];
+
+        if (temp->data == data) {
+            keyNode = temp;
+        }
+
+        if (temp->left != NULL) {
+            queue[++rear] = temp->left;
+        }
+
+        if (temp->right != NULL) {
+            queue[++rear] = temp->right;
+        }
+    }
+
+    if (keyNode != NULL) {
+        TreeNode* deepestNode = getDeepestRightmostNode(*root);
+        keyNode->data = deepestNode->data;
+        deleteDeepestRightmostNode(*root, deepestNode);
+    } else {
+        printf("Node not found.\n");
+    }
+}
+
+TreeNode* search(TreeNode* root, int data) {
+    if (root == NULL) {
+        return NULL;
+    }
+
+    TreeNode* temp;
+    TreeNode* queue[100];
+    int front = -1, rear = -1;
+    queue[++rear] = root;
+
+    while (front != rear) {
+        temp = queue[++front];
+
+        if (temp->data == data) {
+            return temp;
+        }
+
+        if (temp->left != NULL) {
+            queue[++rear] = temp->left;
+        }
+
+        if (temp->right != NULL) {
+            queue[++rear] = temp->right;
+        }
+    }
+    return NULL;
+}
+
+void inorderTraversal(TreeNode* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    inorderTraversal(root->left);
+    printf("%d ", root->data);
+    inorderTraversal(root->right);
+}
+
+void preorderTraversal(TreeNode* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    printf("%d ", root->data);
+    preorderTraversal(root->left);
+    preorderTraversal(root->right);
+}
+
+void postorderTraversal(TreeNode* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    postorderTraversal(root->left);
+    postorderTraversal(root->right);
+    printf("%d ", root->data);
+}
+
+
+// Function to print the tree structure
+void printTreeStructure(TreeNode* node, int depth) {
+    int i;
+    if (node == NULL) {
+        return;
+    }
+
+    printf("\t\t\t\t");
+
+    for (i = 0; i < depth; i++) {
+        printf("    ");
+    }
+    
+    if (i == 0)
+        printf("|-- %d (Root)\n", node->data);
+    else
+        printf("|-- %d\n", node->data);
+
+    printTreeStructure(node->left, depth + 1);
+    printTreeStructure(node->right, depth + 1);
+}
+
