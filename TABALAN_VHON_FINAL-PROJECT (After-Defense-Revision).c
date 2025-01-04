@@ -190,6 +190,7 @@ TreeNode* search(TreeNode* root, int data);
 void inorderTraversal(TreeNode* root);
 void preorderTraversal(TreeNode* root);
 void postorderTraversal(TreeNode* root);
+void levelOrderTraversal(TreeNode* root);
 void printTreeStructure(TreeNode* node, int depth);
 
 
@@ -223,6 +224,7 @@ void resize_terminal() {
         fprintf(stderr, "Error: Unable to get console screen info\n");
         return;
     }
+
 
     // Set terminal size to 80x24 with additional buffer height
     bufferInfo.dwSize.X = 80;  // Columns
@@ -276,8 +278,8 @@ int main() {
     int typeOfArrayOption = 0;
     int sortOption= 0, size = 0;
     
-    int Array2[SizeOfArray2];
-    int mergedArray[MaxLength];
+    int Array2[MaxLength] = {0};
+    int mergedArray[MaxLength] = {0};
      // Declare and initialize character array and other variables
     char cArray[MaxLength] = {0}; // Character array
     char s[MaxLength] = {0};
@@ -307,10 +309,8 @@ int main() {
 
 
     bool exit = false;
-    
-    printf("Before calling resize_terminal()\n");
-resize_terminal();
-printf("After calling resize_terminal()\n");
+    bool again = true;   
+    resize_terminal();
     while (!exit)
     {
         
@@ -329,7 +329,7 @@ printf("After calling resize_terminal()\n");
                 printf("\t\t\t[3] Strings\n");
                 printf("\t\t\t[4] Sorting Algorithms\n");
                 printf("\t\t\t[5] Searching Algorithms\n");
-                printf("\t\t\t[6] Exit\n");
+                printf("\t\t\t[6] Quit\n");
 
                 printf("\n\n\t\t\tChoose an Option: ");
                 scanf("%d" , &DSAOption);
@@ -792,12 +792,16 @@ printf("After calling resize_terminal()\n");
                                                 printf("\n\n\n\n\n");
                                         }
 
+                                    
+
                                         // Merge the arrays
                                         IntMergeArray(Array, SizeOfArray, Array2, SizeOfArray2, mergedArray);
 
                                         // Update the SizeOfArray to reflect the new merged size
-                                        SizeOfArray = SizeOfArray + SizeOfArray2;
+                                        SizeOfArray = SizeOfArray + SizeOfArray2; 
 
+                                        
+                                    
                                         // Copy mergedArray back into Array
                                         for (int i = 0; i < SizeOfArray; i++) {
                                             Array[i] = mergedArray[i];
@@ -807,9 +811,10 @@ printf("After calling resize_terminal()\n");
                                         printf("\n\n\n\n\n");
                                         
                                         // Print the merged array (now stored in Array)
+                                        printCentered("Merged Array:\n\n");
                                         printf("\t\t\t\t");
                                         for (int i = 0; i < SizeOfArray; i++) {
-                                            printf("%d ", Array[i]);
+                                            printf("%d ", mergedArray[i]);
                                         }
                                         printf("\n");
 
@@ -875,7 +880,7 @@ printf("After calling resize_terminal()\n");
                                     printf("\n");
                                     printCentered("=========================================================\n");
 
-                                    printf("\t   Size of the Array: %d\n\n", charSizeOfArray);
+                                    printf("\t   Size of the Array: %d\n\n", SizeOfArray);
 
                                     // Operations for Arrays Here 
                                     printCentered("Array Operations:\n\n");
@@ -892,7 +897,7 @@ printf("After calling resize_terminal()\n");
                                     switch (ArrayOperationOption) 
                                     {
                                         case 1:
-                                             traverseCharArray(cArray,charSizeOfArray);
+                                             traverseCharArray(cArray,SizeOfArray);
                                             do
                                             {
                                                 printf("\n\n\t\t\t\tType E to Exit: ");
@@ -913,18 +918,18 @@ printf("After calling resize_terminal()\n");
                                             } else {
                                                 // Get the value to insert
                                                 printCentered("Original Array:\n");
-                                                chararrayToString(cArray, charSizeOfArray, s);
+                                                chararrayToString(cArray, SizeOfArray, s);
                                                 printCentered(s);
                                                 printf("\n");
                                                 printf("\t\t\t Enter the character to insert: ");
                                                 scanf(" %c", &charInsertValue);
 
                                                 // Get the index to insert at
-                                                printf("\t\t\t Enter the index (0 to %d): ", charSizeOfArray);
+                                                printf("\t\t\t Enter the index (0 to %d): ", SizeOfArray);
                                                 scanf("%d", &charInsertIndex);
 
                                                 // Validate index
-                                                if (charInsertIndex < 0 || charInsertIndex > charSizeOfArray) {
+                                                if (charInsertIndex < 0 || charInsertIndex > SizeOfArray) {
                                                     printCentered(" Invalid index. Operation canceled.\n\n");
                                                 } else {
                                                     // Shift elements to the right
@@ -934,11 +939,11 @@ printf("After calling resize_terminal()\n");
 
                                                     // Insert the new value
                                                     cArray[charInsertIndex] = charInsertValue;
-                                                    charSizeOfArray++; // Increment the array size
+                                                    SizeOfArray++; // Increment the array size
 
                                                     printCentered("Value inserted successfully!\n\n");
                                                     printCentered("Updated Array:\n");
-                                                    chararrayToString(cArray, charSizeOfArray, s);
+                                                    chararrayToString(cArray, SizeOfArray, s);
                                                     printf("\n");
                                                     printCentered(s);
                                                     printf("\n\n");
@@ -1106,6 +1111,10 @@ printf("After calling resize_terminal()\n");
                                                         printCentered("After Sorting:\n");
                                                         printCentered(StringInt);
                                                         printf("\n\n");
+                                                        do {
+                                                            printf("\t\t\t    Type E to Exit: ");
+                                                            scanf(" %c", &Exit);
+                                                        } while (Exit != 'E');
                                                         break;
                                                     case 3: // Bubble Sort
                                                         printf("\e[1;1H\e[2J"); // Clear screen
@@ -1502,11 +1511,7 @@ printf("After calling resize_terminal()\n");
                                                 printf("\n\n\n\n\n");
                                                 printCentered(" Enter value to search: ");
                                                 scanf("%d", &searchValue);
-                                                if (searchSingly(head, searchValue)) {
-                                                    printCentered("Value found in the list!\n");
-                                                } else {
-                                                    printCentered("Value not found in the list.\n");
-                                                }
+                                                searchSingly(head, searchValue);
                                                 do {
                                                     printf("\n\t\t\t     Type E to Exit: ");
                                                     scanf(" %c", &Exit);
@@ -1777,7 +1782,7 @@ printf("After calling resize_terminal()\n");
 
                         case 3: {  // Stack Operations
                                 StackNode* top = NULL; // Stack initialized as empty
-                                int maxSize = 5;       // Define the maximum stack size
+                                int maxSize = MaxLength;       // Define the maximum stack size
                                 do {
                                     printf("\e[1;1H\e[2J"); // Clear screen
                                     printf("\n\n\n\n\n");
@@ -2095,10 +2100,12 @@ printf("After calling resize_terminal()\n");
 
 
                                     switch (TreeOperations) {
-                                        case 1: {
+                                        case 1: 
+                                            int data;
+                                            char repeat;
+                                            do{
                                             printf("\e[1;1H\e[2J"); // Clear the screen
                                             printf("\n\n\n\n\n");
-                                            int data;
                                             printCentered("Tree: \n\n");
                                             printTreeStructure(root, 0);
                                             printf("\n");
@@ -2107,37 +2114,42 @@ printf("After calling resize_terminal()\n");
                                             insert(&root, data);
                                             printf("\e[1;1H\e[2J"); // Clear the screen
                                             printf("\n\n\n\n\n");
+                                            
                                             printCentered("Updated Tree: \n\n");
                                             printTreeStructure(root, 0);
                                             printf("\n");
                                             printCentered("Node inserted successfully!\n");
-                                            do {
-                                                printf("\t\t\t     Type E to Exit: ");
-                                                scanf(" %c", &Exit);
-                                            } while (Exit != 'E');
+                                            
+                                            printCentered("Do you want to insert another node? (Y/N): ");
+                                            scanf(" %c", &repeat);
+                                            } while (repeat == 'Y' || repeat == 'y');
+                                          
+                                           
                                             break;
-                                        }
+                                        
                                         case 2: {
-                                            printf("\e[1;1H\e[2J"); // Clear the screen
-                                            printf("\n\n\n\n\n");
-                                            int data;
-                                            printCentered("Tree: \n\n");
-                                            printTreeStructure(root, 0);
-                                            printf("\n");
-                                            printCentered("Enter the value to delete: ");
-                                            scanf("%d", &data);
-                                            deleteNode(&root, data);
-                                            printf("\e[1;1H\e[2J"); // Clear the screen
-                                            printf("\n\n\n\n\n");
-                                            printCentered("Updated Tree: \n\n");
-                                            printTreeStructure(root, 0);
-                                            printf("\n");
-                                            printCentered("Node deleted successfully!\n");
-                                            do {
-                                                printf("\t\t\t     Type E to Exit: ");
-                                                scanf(" %c", &Exit);
-                                            } while (Exit != 'E');
-                                            break;
+                                            char repeat;
+                                            do{
+                                                printf("\e[1;1H\e[2J"); // Clear the screen
+                                                printf("\n\n\n\n\n");
+                                                int data;
+                                                printCentered("Tree: \n\n");
+                                                printTreeStructure(root, 0);
+                                                printf("\n");
+                                                printCentered("Enter the value to delete: ");
+                                                scanf("%d", &data);
+                                                deleteNode(&root, data);
+                                                printf("\e[1;1H\e[2J"); // Clear the screen
+                                                printf("\n\n\n\n\n");
+                                                printCentered("Updated Tree: \n\n");
+                                                printTreeStructure(root, 0);
+                                                printf("\n");
+                                                printCentered("Node deleted successfully!\n");
+                                                printCentered("Do you want to insert another node? (Y/N): ");
+                                                scanf(" %c", &repeat);
+                                                
+                                                } while (repeat == 'Y' || repeat == 'y');
+                                                break;
                                         }
                                         case 3: {
                                             printf("\e[1;1H\e[2J"); // Clear the screen
@@ -2181,53 +2193,101 @@ printf("After calling resize_terminal()\n");
                                         case 4: {
                                             printf("\e[1;1H\e[2J"); // Clear the screen
                                             printf("\n\n\n\n\n");
+                                            int traversalOption1;
                                             int traversalOption;
-                                            printCentered("Tree: \n\n");
-                                            printTreeStructure(root, 0);
-                                            printf("\n");
-                                            printCentered("Choose traversal option:\n\n");
-                                            printf("\t\t\t    [1] Inorder Traversal\n");
-                                            printf("\t\t\t    [2] Preorder Traversal\n");
-                                            printf("\t\t\t    [3] Postorder Traversal\n\n");
-                                            printCentered("Choose an Option: ");
-                                            scanf("%d", &traversalOption);
+                                            char again;
+                                            do
+                                            {
+                                                printf("\e[1;1H\e[2J"); // Clear the screen
+                                                printf("\n\n\n\n\n");
+                                                printCentered("Tree: \n\n");
+                                                printTreeStructure(root, 0);
+                                                printf("\n");
+                                                printCentered("Choose traversal option:\n\n");
+                                                printf("\t\t     [1] Breadth-First Traversal (Level Order)\n");
+                                                printf("\t\t     [2] Depth-First Traversal (DFS)\n");
+                                                printf("\t\t     [3] Exit\n\n");
+                                                printCentered("Choose an Option: ");
+                                                scanf("%d", &traversalOption1);
+                                                
+                                                switch (traversalOption1)
+                                                {
+                                                    case 1:
+                                                            printf("\e[1;1H\e[2J"); // Clear the screen
+                                                            printf("\n\n\n\n\n");
+                                                            printCentered("Tree: \n\n");
+                                                            printTreeStructure(root, 0);
+                                                            printf("\n");
+                                                            printf("\t\t\t  Breadth-First Traversal: ");
+                                                            levelOrderTraversal(root);
+                                                            printf("\n");
+                                                             do {
+                                                                    printf("\t\t\t     Type E to Exit: ");
+                                                                    scanf(" %c", &Exit);
+                                                                } while (Exit != 'E');
+                                                            
+                                                        break;
+                                                    case 2:
+                                                        printf("\e[1;1H\e[2J"); // Clear the screen
+                                                        printf("\n\n\n\n\n");
+                                                        printCentered("Tree: \n\n");
+                                                        printTreeStructure(root, 0);
+                                                        printCentered("Choose traversal option:\n\n");
+                                                        printf("\t\t\t    [1] Inorder Traversal\n");
+                                                        printf("\t\t\t    [2] Preorder Traversal\n");
+                                                        printf("\t\t\t    [3] Postorder Traversal\n\n");
+                                                        printCentered("Choose an Option: ");
+                                                        scanf("%d", &traversalOption);
 
-                                            if (traversalOption == 1) {
-                                                printf("\e[1;1H\e[2J"); // Clear the screen
-                                                printf("\n\n\n\n\n");
-                                                printCentered("Tree: \n\n");
-                                                printTreeStructure(root, 0);
-                                                printf("\n");
-                                                printf("\t\t\t  Inorder Traversal: ");
-                                                inorderTraversal(root);
-                                                printf("\n");
-                                            } else if (traversalOption == 2) {
-                                                printf("\e[1;1H\e[2J"); // Clear the screen
-                                                printf("\n\n\n\n\n");
-                                                printCentered("Tree: \n\n");
-                                                printTreeStructure(root, 0);
-                                                printf("\n");
-                                                printf("\t\t\t  Preorder Traversal: ");
-                                                preorderTraversal(root);
-                                                printf("\n");
-                                            } else if (traversalOption == 3) {
-                                                printf("\e[1;1H\e[2J"); // Clear the screen
-                                                printf("\n\n\n\n\n");
-                                                printCentered("Tree: \n\n");
-                                                printTreeStructure(root, 0);
-                                                printf("\n");
-                                                printf("\t\t\t  Postorder Traversal: ");
-                                                postorderTraversal(root);
-                                                printf("\n");
-                                            } else {
-                                                printf("Invalid option.\n");
-                                            }
-                                                do {
-                                                        printf("\t\t\t     Type E to Exit: ");
-                                                        scanf(" %c", &Exit);
-                                                    } while (Exit != 'E');
-                                                    break;
+                                                        if (traversalOption == 1) {
+                                                            printf("\e[1;1H\e[2J"); // Clear the screen
+                                                            printf("\n\n\n\n\n");
+                                                            printCentered("Tree: \n\n");
+                                                            printTreeStructure(root, 0);
+                                                            printf("\n");
+                                                            printf("\t\t\t  Inorder Traversal: ");
+                                                            inorderTraversal(root);
+                                                            printf("\n");
+                                                        } else if (traversalOption == 2) {
+                                                            printf("\e[1;1H\e[2J"); // Clear the screen
+                                                            printf("\n\n\n\n\n");
+                                                            printCentered("Tree: \n\n");
+                                                            printTreeStructure(root, 0);
+                                                            printf("\n");
+                                                            printf("\t\t\t  Preorder Traversal: ");
+                                                            preorderTraversal(root);
+                                                            printf("\n");
+                                                        } else if (traversalOption == 3) {
+                                                            printf("\e[1;1H\e[2J"); // Clear the screen
+                                                            printf("\n\n\n\n\n");
+                                                            printCentered("Tree: \n\n");
+                                                            printTreeStructure(root, 0);
+                                                            printf("\n");
+                                                            printf("\t\t\t  Postorder Traversal: ");
+                                                            postorderTraversal(root);
+                                                            printf("\n");
+                                                        } else {
+                                                            printf("Invalid option.\n");
+                                                        }
+                                                            do {
+                                                                    printf("\t\t\t     Type E to Exit: ");
+                                                                    scanf(" %c", &Exit);
+                                                                } while (Exit != 'E');
+                                                                break;
+                                                            
+                                                        break;
+                                                        
+                                                    case 3:
+                                                        break;
+                                                    
+                                                    default:
+                                                        break;
+                                                        
                                                 }
+                                            
+                                            } while (traversalOption1 != 3);
+                                            break;
+                                        }
                                         case 5: {
                                              printf("\e[1;1H\e[2J"); // Clear the screen
                                             printf("\n\n\n\n\n");
@@ -2977,7 +3037,7 @@ printf("After calling resize_terminal()\n");
                             do{
                                 printf("\e[1;1H\e[2J"); // Clear screen
                                 printf("\n\n\n\n\n");
-                                printf("\nSelect the type of searching algorithm:\n\n");
+                                printCentered("Select the type of searching algorithm:\n\n");
                                 printf("\t\t\t   [1] Linear Search\n");
                                 printf("\t\t\t   [2] Binary Search\n");
                                 printf("\t\t\t   [3] Exit\n\n");
@@ -3382,8 +3442,8 @@ printf("After calling resize_terminal()\n");
                     printf("\e[1;1H\e[2J"); //Regex to Clear the screen
                     printf("\n\n\n\n\n");
                     char exitChoice;
-                    printCentered("Are you sure you want to exit the program?\n");
-                    printCentered("[Y]es or [N]o\n\n");
+                    printCentered("Are you sure you want to quit the program?\n");
+                    printCentered("[Y/y]es or [N/n]o\n\n");
                     printCentered("Enter your choice: ");
                     scanf(" %c", &exitChoice);
 
@@ -3501,14 +3561,14 @@ void PrintWelcome()
 }
 
 
-void binarySearch(int arr[], int size, int target) {
+void binarySearch(int arr[], int size, int target) {  
     int left = 0, right = size - 1, iteration = 1;
 
     printf("\n");
     printCentered("Iterations of Binary Search:\n");
     printf("\n");
     while (left <= right) {
-        int mid = left + (right - left) / 2;
+        int mid = left + (right - left) / 2; 
 
         printf("\t\tIteration %d: Comparing target %d with element %d at index %d\n", iteration++, target, arr[mid], mid);
 
@@ -3997,7 +4057,7 @@ char chargetMaxValue(char arr[], int size) {
 
 void IntMergeArray(int* arr1, int size1, int* arr2, int size2, int* mergeArray) {
     int mergeSize = size1 + size2;
-
+   
     // Copy elements from the first array
     for (int i = 0; i < size1; i++) {
         mergeArray[i] = arr1[i];
@@ -4007,6 +4067,8 @@ void IntMergeArray(int* arr1, int size1, int* arr2, int size2, int* mergeArray) 
     for (int i = 0; i < size2; i++) {
         mergeArray[size1 + i] = arr2[i];
     }
+
+
 }
 
 
@@ -4073,6 +4135,7 @@ void deleteNodeSingly(Node** head, int value) {
     prev->next = temp->next;
     free(temp);
     printf("\n\t\t\t\tDeleted %d:\n", value);
+    printf("\t");
     traverseSingly(*head);
 }
 
@@ -4739,13 +4802,13 @@ void traverseArray(int arr[], int size){
 }
 
 void traverseCharArray(char arr[], int size) {
-    char Exit;
+
 
     printf("\e[1;1H\e[2J"); //Regex to Clear the screen
     printf("\n\n\n\n\n");
     printf("\t\t\t\tTraversing Array:\n\n");
     for(int i = 0; i < size; i++){
-        printf("\t\t\t\t  Index %c: [%c]\n", i, arr[i]);
+        printf("\t\t\t\t  Index %d: [%c]\n", i, arr[i]);
         usleep((__useconds_t)(0.5 * 1e6));
     }
 }
@@ -5102,6 +5165,33 @@ void postorderTraversal(TreeNode* root) {
     printf("%d ", root->data);
 }
 
+void levelOrderTraversal(TreeNode* root) {
+    if (root == NULL) {
+        printf("Tree is empty.\n");
+        return;
+    }
+
+    TreeNode* queue[100];
+    int front = -1, rear = -1;
+    queue[++rear] = root; // Enqueue the root node
+
+    while (front != rear) {
+        TreeNode* current = queue[++front]; // Dequeue the front node
+
+        printf("%d ", current->data); // Visit the node
+
+        // Enqueue the left child
+        if (current->left != NULL) {
+            queue[++rear] = current->left;
+        }
+
+        // Enqueue the right child
+        if (current->right != NULL) {
+            queue[++rear] = current->right;
+        }
+    }
+    printf("\n");
+}
 
 // Function to print the tree structure
 void printTreeStructure(TreeNode* node, int depth) {
